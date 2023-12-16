@@ -1,3 +1,4 @@
+import Navbar from "../navbar/Navbar";
 import Dashboard from "./components/Dashboard";
 
 
