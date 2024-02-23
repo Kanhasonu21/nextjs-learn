@@ -4,14 +4,14 @@ import Dashboard from "./components/Dashboard";
 
 export default async function DashboardPage() {
 
-    const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+    const response = await fetch('http://localhost:3000/todo', {
         cache: 'no-store'
     })
-    const users = await response.json()
+    const { data = [] } = await response.json()
 
     return (
         <main>
-            <Dashboard users={users} />
+            <Dashboard todoList={data} />
         </main>
     )
 }
