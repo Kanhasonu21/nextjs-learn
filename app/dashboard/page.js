@@ -3,7 +3,7 @@ import Dashboard from "./components/Dashboard";
 
 
 export const metadata = {
-    metadataBase: new URL('http://localhost:3000'),
+    // metadataBase: new URL('http://localhost:300'),
     title:"Add New Task",
     description:'The New Way to develop web app',
     // openGraph:{
