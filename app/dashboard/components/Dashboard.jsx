@@ -10,6 +10,7 @@ import PlusIcon from "../../assets/plus.svg";
 import ImageAnimation from "./ImageAnimation";
 import { useRouter } from "next/navigation";
 import AddTask from "./AddTask";
+import { motion } from 'framer-motion';
 
 const Dashboard = ({ todoList = [] }) => {
   const [data, setData] = useState({});
@@ -44,13 +45,15 @@ const Dashboard = ({ todoList = [] }) => {
     <div className="p-4">
       <AddTask router={router} handleModal={handleModal} data={data} />
       <div className="flex justify-center">
-        <button
-          className="btn btn-active btn-ghost w-3/6"
+        <motion.button
+         whileHover={{ scale: 1.1 }}
+         whileTap={{ scale: 0.9 }}
+          className="btn btn-active btn-glass w-3/6"
           onClick={() => handleModal(true)}
         >
           <Image src={PlusIcon} height={25} />
           Add Task
-        </button>
+        </motion.button>
       </div>
       <div className="overflow-x-auto flex justify-center p-8">
         <table className="table p-10 w-3/6">

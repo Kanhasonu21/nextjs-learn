@@ -2,6 +2,14 @@ import Navbar from "../navbar/Navbar";
 import Dashboard from "./components/Dashboard";
 
 
+export const metadata = {
+    title:"Add New Task",
+    description:'The New Way to develop web app',
+    openGraph:{
+        title: 'this is open graph title for testing',
+        description: 'Some description',
+    }
+}
 export default async function DashboardPage() {
 
     const response = await fetch('http://localhost:3000/todo', {
