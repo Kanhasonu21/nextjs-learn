@@ -1,13 +1,11 @@
 
-import Animation from './components/Animation';
-import { TypewriterEffect } from './components/TypeWriterEffect';
-import {words} from './constants/constants';
+import { LampDemo } from './components/Lamp';
 
 export default function Home() {
   return (
     <main>
       <div className="home-page">
-        <TypewriterEffect words={words} />
+        <LampDemo/>
       </div>
 
     </main>
