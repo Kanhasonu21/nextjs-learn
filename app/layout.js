@@ -2,7 +2,6 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import './style.scss'
 import Navbar from './navbar/Navbar'
-import connectMongoDV from './libs/mongoose';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -12,10 +11,9 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
-  connectMongoDV()
   return (
-    <html lang="en">
-            <body className={inter.className}>
+    <html lang="en" className='bg-gray-50 dark:bg-gray-900'>
+      <body className="bg-gray-50 dark:bg-gray-900">
         <Navbar />
         {children}</body>
     </html>

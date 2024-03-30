@@ -1,40 +1,25 @@
 import Link from "next/link";
 import React from "react";
-import "./navbar.scss";
 
-function Navbar() {
+import { Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from "flowbite-react";
+
+const NavbarComponent = () => {
   return (
-    <div>
-      <section className="navigation">
-        <div className="nav-container">
-          <div className="brand">
-            <Link href="/">Next JS ToDo</Link>
-          </div>
-          <nav className="nav">
-            <div className="nav-mobile">
-              <Link id="nav-toggle" href="/">
-                <span></span>
-              </Link>
-            </div>
-            <ul className="nav-list">
-              <li>
-                <Link href="/dashboard">Dashboard</Link>
-              </li>
-              <li>
-                <Link href="/about">About Us</Link>
-              </li>
-              <li>
-                <Link href="/contact">Contact</Link>
-              </li>
-              <li>
-                <Link href="/login">Login</Link>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </section>
-    </div>
+    <Navbar fluid  className="p-6"> 
+      <NavbarBrand as={Link} href="/">
+        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">NextJS Todo App</span>
+      </NavbarBrand>
+      <NavbarToggle />
+      <NavbarCollapse>
+        <NavbarLink as={Link} href="/about" className="poin">
+          About
+        </NavbarLink>
+        <NavbarLink as={Link}  href="/dashboard">Dashboard</NavbarLink>
+        <NavbarLink  as={Link} href="/about">About Us</NavbarLink>
+        <NavbarLink as={Link} href="/login">Login</NavbarLink>
+      </NavbarCollapse>
+    </Navbar>
   );
-}
+};
 
-export default Navbar;
+export default NavbarComponent;

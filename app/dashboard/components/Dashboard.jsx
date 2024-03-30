@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
 import EditIconImage from "../../assets/edit.svg";
@@ -10,7 +10,8 @@ import PlusIcon from "../../assets/plus.svg";
 import ImageAnimation from "./ImageAnimation";
 import { useRouter } from "next/navigation";
 import AddTask from "./AddTask";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
+import { Button } from "flowbite-react";
 
 const Dashboard = ({ todoList = [] }) => {
   const [data, setData] = useState({});
@@ -34,26 +35,21 @@ const Dashboard = ({ todoList = [] }) => {
     } else {
       document.getElementById("my_modal_1").close();
     }
-    setData({})
+    setData({});
   };
 
-  const handleEdit = (taskData)=> {
+  const handleEdit = (taskData) => {
     setData(taskData);
-    document.getElementById("my_modal_1").showModal()
-  }
+    document.getElementById("my_modal_1").showModal();
+  };
   return (
-    <div className="p-4">
+    <div className="p-4 bg-gray-50 dark:bg-gray-900 dashboard">
       <AddTask router={router} handleModal={handleModal} data={data} />
       <div className="flex justify-center">
-        <motion.button
-         whileHover={{ scale: 1.1 }}
-         whileTap={{ scale: 0.9 }}
-          className="btn btn-active btn-glass w-3/6"
-          onClick={() => handleModal(true)}
-        >
-          <Image src={PlusIcon} height={25} />
-          Add Task
-        </motion.button>
+        <Button className="w-3/6 btn-p" pill 
+                  onClick={() => handleModal(true)}
+                  > <Image src={PlusIcon} height={25} />
+          Add Task</Button>
       </div>
       <div className="overflow-x-auto flex justify-center p-8">
         <table className="table p-10 w-3/6">

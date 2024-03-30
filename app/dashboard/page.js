@@ -3,23 +3,23 @@ import Dashboard from "./components/Dashboard";
 
 
 export const metadata = {
-    // metadataBase: new URL('http://localhost:300'),
-    title:"Add New Task",
-    description:'The New Way to develop web app',
-    // openGraph:{
-    //     title: 'this is open graph title for testing',
-    //     description: 'Some description',
-    // }
+    title: "Add New Task",
+    description: 'The New Way to develop web app',
 }
 export default async function DashboardPage() {
-
-    const response = await fetch('http://localhost:3000/todo', {
+    const PortalURI= process.env.PORTAL_URI;
+    const response = await fetch(`${PortalURI}/api/dashboard`, {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json",
+          },
         cache: 'no-store'
     })
+
     const { data = [] } = await response.json()
 
     return (
-        <main>
+        <main className="bg-gray-50 dark:bg-gray-900">
             <Dashboard todoList={data} />
         </main>
     )
