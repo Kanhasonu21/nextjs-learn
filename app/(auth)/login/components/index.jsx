@@ -1,18 +1,41 @@
-"use client"
+"use client";
 import { Button } from "flowbite-react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 const LoginComponent = () => {
+  const session = useSession();
+  const router = useRouter();
 
-  const handleLogin =  (e) =>{
+  const [signInLoader, setSignInLoader] = useState(false);
+  useEffect(() => {
+    if (session?.status === "authenticated") router.push("/dashboard");
+  }, [router, session]);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     const form_data = new FormData(e.target);
     const email = form_data.get("email");
     const password = form_data.get("password");
-    console.log(email,password);
-
-  }
+    try {
+      setSignInLoader(true);
+      const res = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+      if (res.url) {
+        router.push("/dashboard");
+        setSignInLoader(false);
+      }
+    } catch (err) {
+      setSignInLoader(false);
+      console.log(err);
+    }
+  };
+  
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -23,9 +46,7 @@ const LoginComponent = () => {
             </h1>
             <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
               <div>
-                <label
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   Your email
                 </label>
                 <input
@@ -38,9 +59,7 @@ const LoginComponent = () => {
                 />
               </div>
               <div>
-                <label
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   Password
                 </label>
                 <input
@@ -53,6 +72,7 @@ const LoginComponent = () => {
                 />
               </div>
               <Button
+                isProcessing={signInLoader}
                 type="submit"
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >

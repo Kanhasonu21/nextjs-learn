@@ -1,5 +1,5 @@
 
-import connectMongoDV from '@/app/libs/mongoose';
+import connectMongoDV from "../../libs/mongoose";
 import Todo from '../../models/todo';
 import { NextResponse } from "next/server";
 

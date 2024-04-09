@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import Users from '../../models/users';
-import connectMongoDV from "@/app/libs/mongoose";
-import { registerSchema } from "@/app/server/validator/register";
+import connectMongoDV from "../../libs/mongoose";
+import { registerSchema } from "../../server/validator/register";
 import bcrypt from 'bcrypt';
 
 const SALT_ROUND = parseInt(process.env.SALT_ROUND) ?? 10;
