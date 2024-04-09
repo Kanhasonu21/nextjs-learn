@@ -10,16 +10,16 @@ import PlusIcon from "../../assets/plus.svg";
 import ImageAnimation from "./ImageAnimation";
 import { useRouter } from "next/navigation";
 import AddTask from "./AddTask";
-import { motion } from "framer-motion";
-import { Button } from "flowbite-react";
+import { Button,Table } from "flowbite-react";
 
 const Dashboard = ({ todoList = [] }) => {
   const [data, setData] = useState({});
+  const [isAddTaskModalOpen, setAddModal] = useState(false);
   const router = useRouter();
 
   const deleteTask = async (taskId) => {
     try {
-      const response = await fetch(`http://localhost:3000/todo?id=${taskId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_PORTAL_URI}/api/todo?id=${taskId}`, {
         method: "DELETE",
       });
       if (response) {
@@ -31,61 +31,66 @@ const Dashboard = ({ todoList = [] }) => {
   };
   const handleModal = (open = false) => {
     if (open) {
-      document.getElementById("my_modal_1").showModal();
+      setAddModal(true);
     } else {
-      document.getElementById("my_modal_1").close();
+      setAddModal(false);
     }
     setData({});
   };
 
   const handleEdit = (taskData) => {
     setData(taskData);
-    document.getElementById("my_modal_1").showModal();
+    handleModal(true)
   };
   return (
     <div className="p-4 bg-gray-50 dark:bg-gray-900 dashboard">
-      <AddTask router={router} handleModal={handleModal} data={data} />
+      <AddTask
+        router={router}
+        handleModal={handleModal}
+        data={data}
+        isOpen={isAddTaskModalOpen}
+      />
       <div className="flex justify-center">
-        <Button className="w-3/6 btn-p" pill 
-                  onClick={() => handleModal(true)}
-                  > <Image src={PlusIcon} height={25} />
-          Add Task</Button>
+        <Button className="w-3/6 btn-p" pill onClick={() => handleModal(true)}>
+        <Image src={PlusIcon} height={20} className="mr-2" />{"  "}
+          Add Task
+        </Button>
       </div>
-      <div className="overflow-x-auto flex justify-center p-8">
-        <table className="table p-10 w-3/6">
-          <thead>
-            <tr>
-              <th>S.No</th>
-              <th>Task Name</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
+      <div className="flex justify-center p-8">
+        <Table border={1}  striped className="p-10 w-full">  
+          <Table.Head>
+            <Table.HeadCell>S No.</Table.HeadCell>
+            <Table.HeadCell>Task Name</Table.HeadCell>
+            <Table.HeadCell>Edit</Table.HeadCell>
+            <Table.HeadCell>Delete</Table.HeadCell>
+          </Table.Head>
+          <Table.Body className="divide-y">
             {todoList.map((task, idx) => (
-              <tr key={idx}>
-                <th>{idx + 1}</th>
-                <td>{task.taskName}</td>
-                <td>
+              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                  {idx + 1}
+                </Table.Cell>
+                <Table.Cell>{task.taskName}</Table.Cell>
+                <Table.Cell>
                   <div className="w-fit" onClick={() => handleEdit(task)}>
                     <ImageAnimation
                       plainImage={EditIconImage}
                       animatedImage={EditIconAni}
                     />
                   </div>
-                </td>
-                <td>
+                </Table.Cell>
+                <Table.Cell>
                   <div className="w-fit" onClick={() => deleteTask(task._id)}>
                     <ImageAnimation
                       plainImage={DeleteIcon}
                       animatedImage={DeleteIconAni}
                     />
                   </div>
-                </td>
-              </tr>
+                </Table.Cell>
+              </Table.Row>
             ))}
-          </tbody>
-        </table>
+          </Table.Body>
+        </Table>
       </div>
     </div>
   );

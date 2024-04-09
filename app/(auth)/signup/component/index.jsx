@@ -1,12 +1,110 @@
 "use client";
+import { Button, TextInput } from "flowbite-react";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from 'next/navigation'
+
 
 const SignupPage = () => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(e.target);
+  
+  const router = useRouter()
+
+  const [loader, setLoader] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    cPassword: "",
+  });
+
+  const [errorFormData, setErrorFormData] = useState({
+    email: "",
+    password: "",
+    cPassword: "",
+  });
+
+  const validateEmail = (email) => {
+    return email.match(
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
   };
+
+  const onChangeInput = (value, type) => {
+    switch (type) {
+      case "email":
+        const isEmail = validateEmail(value);
+        setFormData({ ...formData, email: value });
+        if (isEmail) {
+          setErrorFormData({ ...errorFormData, email: "" });
+        } else setErrorFormData({ ...errorFormData, email: "Email not valid" });
+        break;
+      case "password":
+        setFormData({ ...formData, password: value });
+        setErrorFormData({ ...errorFormData, password: "" });
+        break;
+      case "cPassword":
+        setFormData({ ...formData, cPassword: value });
+        if (value !== formData.password) {
+          setErrorFormData({
+            ...errorFormData,
+            cPassword: "Password Mismatch!",
+          });
+        } else setErrorFormData({ ...errorFormData, cPassword: "" });
+        break;
+      default:
+        break;
+    }
+  };
+
+  const checkForErrors = (errorState) => {
+    let hasError = false;
+    for (const key in errorState) {
+      if (errorState[key]) {
+        hasError = true;
+      }
+    }
+    for (const key in formData) {
+      if (!formData[key]) {
+        hasError = true;
+      }
+    }
+    // No error values found
+    return hasError;
+  };
+
+  const handleSubmit = (e) => {
+
+    e.preventDefault();
+    const hasFormError = checkForErrors(errorFormData);
+    if (hasFormError) return;
+    const { email, password } = formData;
+    handleRegisterApi({ email, password });
+  };
+
+  const handleRegisterApi = async (payload) => {
+    setLoader(true);
+    const PortalURI = process.env.NEXT_PUBLIC_PORTAL_URI;
+    try {
+      const response = await fetch(`${PortalURI}/api/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+        body: JSON.stringify(payload),
+      });
+      setLoader(false);
+      setFormData({
+        email: "",
+        password: "",
+        cPassword: "",
+      });
+      router.push('/login')
+    } catch (err) {
+      setLoader(false);
+      console.log(err);
+    }
+  };
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -15,25 +113,22 @@ const SignupPage = () => {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Create and account
             </h1>
-            <form
-              className="space-y-4 md:space-y-6"
-              action="#"
-              onSubmit={handleSubmit}
-            >
+            <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
               <div>
-                <label
-                  for="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   Your email
                 </label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                <TextInput
                   placeholder="name@company.com"
-                  required=""
+                  value={formData.email}
+                  required
+                  color=""
+                  helperText={
+                    <>
+                      <span>{errorFormData.email}</span>
+                    </>
+                  }
+                  onChange={(e) => onChangeInput(e.target.value, "email")}
                 />
               </div>
               <div>
@@ -43,13 +138,18 @@ const SignupPage = () => {
                 >
                   Password
                 </label>
-                <input
+                <TextInput
+                  value={formData.password}
                   type="password"
-                  name="password"
-                  id="password"
                   placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required=""
+                  required
+                  color="success"
+                  helperText={
+                    <>
+                      <span>{errorFormData.password}</span>
+                    </>
+                  }
+                  onChange={(e) => onChangeInput(e.target.value, "password")}
                 />
               </div>
               <div>
@@ -59,29 +159,29 @@ const SignupPage = () => {
                 >
                   Confirm password
                 </label>
-                <input
+                <TextInput
+                  value={formData.cPassword}
                   type="confirm-password"
-                  name="confirm-password"
-                  id="confirm-password"
                   placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required=""
+                  required
+                  color=""
+                  helperText={
+                    <>
+                      <span>{errorFormData.cPassword}</span>
+                    </>
+                  }
+                  onChange={(e) => onChangeInput(e.target.value, "cPassword")}
                 />
               </div>
-              {/* <div className="flex items-start">
-                      <div className="flex items-center h-5">
-                        <input id="terms" aria-describedby="terms" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required="">
-                      </div>
-                      <div className="ml-3 text-sm">
-                        <label for="terms" className="font-light text-gray-500 dark:text-gray-300">I accept the <a className="font-medium text-primary-600 hover:underline dark:text-primary-500" href="#">Terms and Conditions</a></label>
-                      </div>
-                  </div> */}
-              <button
+
+              <Button
+                // disabled={disableSubmit}
+                isProcessing={loader}
                 type="submit"
-                className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
                 Create an account
-              </button>
+              </Button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{" "}
                 <Link

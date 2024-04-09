@@ -7,7 +7,7 @@ export const metadata = {
     description: 'The New Way to develop web app',
 }
 export default async function DashboardPage() {
-    const PortalURI= process.env.PORTAL_URI;
+    const PortalURI= process.env.NEXT_PUBLIC_PORTAL_URI;
     const response = await fetch(`${PortalURI}/api/dashboard`, {
         method: 'GET',
         headers: {
