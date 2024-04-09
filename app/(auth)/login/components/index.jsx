@@ -24,7 +24,6 @@ const LoginComponent = () => {
             <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
               <div>
                 <label
-                  for="email"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Your email
@@ -40,7 +39,6 @@ const LoginComponent = () => {
               </div>
               <div>
                 <label
-                  for="password"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Password

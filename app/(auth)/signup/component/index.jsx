@@ -133,7 +133,6 @@ const SignupPage = () => {
               </div>
               <div>
                 <label
-                  for="password"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Password
@@ -154,7 +153,6 @@ const SignupPage = () => {
               </div>
               <div>
                 <label
-                  for="confirm-password"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Confirm password

@@ -52,7 +52,7 @@ const Dashboard = ({ todoList = [] }) => {
       />
       <div className="flex justify-center">
         <Button className="w-3/6 btn-p" pill onClick={() => handleModal(true)}>
-        <Image src={PlusIcon} height={20} className="mr-2" />{"  "}
+        <Image src={PlusIcon} height={20} className="mr-2" alt="add-image"/>{"  "}
           Add Task
         </Button>
       </div>
@@ -66,7 +66,7 @@ const Dashboard = ({ todoList = [] }) => {
           </Table.Head>
           <Table.Body className="divide-y">
             {todoList.map((task, idx) => (
-              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800" key={idx}>
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                   {idx + 1}
                 </Table.Cell>
